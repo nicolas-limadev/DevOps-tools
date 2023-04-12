@@ -1,0 +1,46 @@
+---
+- name: Configurar servidor de aplicação Java
+  hosts: app01
+
+  user: vagrant
+  become: yes
+
+  vars:
+    - dbhost: "db01"
+    - dbname: "notes"
+    - dbusername: "notesapps"
+    - dbpassword: devops
+
+  tasks:
+    - name: Configurar hosts lab ansible
+      lineinfile:
+        dest: /etc/hosts
+        state: present
+        line: "{{item}}"
+      with_items:
+        - 192.168.1.2 control-node
+        - 192.168.1.3 app01
+        - 192.168.1.4 db01
+
+    - name: Adicionar usuario de app
+      user:
+        name: app
+        comment: Usuario de aplicação
+        uid: 500
+
+    - name: Instalacao do Maven
+      apt:
+        name: maven
+        state: latest
+
+    - name: Instalacao do Java
+      apt:
+        name: java-17.0.6-openjdk
+        state: latest
+
+    - name: Criação do diretório do app
+      file:
+        path: /opt/notes
+        state: directory
+        owner: app
+        group: app

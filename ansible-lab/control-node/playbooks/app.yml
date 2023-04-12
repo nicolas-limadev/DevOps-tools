@@ -7,8 +7,8 @@
 
   vars:
     - dbhost: "db01"
-    - dbname: "notes"
-    - dbusername: "notesapps"
+    - dbname: "springrest"
+    - dbusername: "springapp"
     - dbpassword: devops
 
   tasks:
@@ -40,7 +40,21 @@
 
     - name: Criação do diretório do app
       file:
-        path: /opt/notes
+        path: /opt/app
         state: directory
         owner: app
         group: app
+
+    - name: Clone do repositorio git
+      git:
+        repo: "https://github.com/nicolas-limadev/spring-rest-api.git"
+        dest: opt/app
+        clone: yes
+        force: yes
+    - name: Arquivo de propriedades para camada de banco de dados
+      template:
+        src: application.properties
+        dest: opt/app/src/main/resources/application.properties
+    - name: Gerar pacotes da aplicação
+        command: mvn -f /opt/app.pom.xml package
+        become_user: app

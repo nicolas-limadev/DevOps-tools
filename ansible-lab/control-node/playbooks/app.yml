@@ -51,10 +51,17 @@
         dest: opt/app
         clone: yes
         force: yes
+
     - name: Arquivo de propriedades para camada de banco de dados
       template:
         src: application.properties
         dest: opt/app/src/main/resources/application.properties
+
     - name: Gerar pacotes da aplicação
         command: mvn -f /opt/app.pom.xml package
         become_user: app
+
+    - name: Configurar serviço do Systemd
+      template:
+        src: etc/systemd/system/app.service
+        src: /etc/systemd/system/app.service

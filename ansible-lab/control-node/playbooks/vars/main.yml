@@ -1,10 +1,10 @@
 mysql_root_password: devops
 mysql_databases:
-  - name: notes
+  - name: app
     encoding: latin1
     collation: latin1_general_ci
 mysql_users:
-  - name: notesapp
+  - name: springapp
     host: "%"
     password: devops
-    priv: "notes.*:ALL"
+    priv: "app.*:ALL"

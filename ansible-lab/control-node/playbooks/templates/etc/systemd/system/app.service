@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=app
 WorkingDirectory=/opt/app
-ExecStart=/usr/bin/java -jar -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom /opt/app/target/spring-rest-{{app_version.stdout}}.jar
+ExecStart=/usr/bin/java -jar -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom /opt/app/target/spring-rest-api-{{app_version.stdout}}.jar
 SyslogIdentifier=app-%i
 
 [Install]

@@ -58,10 +58,10 @@
     - name: Arquivo de propriedades para camada de banco de dados
       template:
         src: application.properties
-        dest: opt/app/src/main/resources/application.properties
+        dest: opt/app/spring-rest-api/src/main/resources/application.properties
 
     - name: Gerar pacotes da aplicação
-      command: mvn -f /opt/app/pom.xml package
+      command: mvn -f /opt/app/spring-rest-api/pom.xml package
       become: yes
       become_user: app
 

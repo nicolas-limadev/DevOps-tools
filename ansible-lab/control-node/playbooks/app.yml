@@ -7,88 +7,71 @@
 
   vars:
     - dbhost: "db01"
-    - dbname: "springrest"
-    - dbusername: "springapp"
-    - dbpassword: devops
-
+    - dbname: "notes"
+    - dbusername: "notesapp"
+    - dbpassword: "devopsmaonamassa"
   tasks:
-    - name: Configurar hosts lab ansible
-      lineinfile:
-        dest: /etc/hosts
-        state: present
-        line: "{{item}}"
-      with_items:
-        - 192.168.1.2 control-node
-        - 192.168.1.3 app01
-        - 192.168.1.4 db01
-
     - name: Adicionar usuario de app
       user:
         name: app
         comment: Usuario de aplicação
         uid: 500
-
-    - name: Instalacao do Maven
+    - name: Instalação do Maven
       apt:
         name: maven
         state: latest
-
-    - name: Instalacao do Java
+    - name: Instalação do Java
       apt:
-        name: openjdk-17-jdk
+        name: openjdk-11-jdk
         state: latest
-
-    - name: Criação do diretório do app
+    - name: Criação do diretório de app
       file:
-        path: /opt/app
+        path: /opt/notes
         state: directory
         owner: app
         group: app
+    - name: Adicionar exceção para pasta /opt/notes
+      become: yes
+      command: git config --global --add safe.directory /opt/notes
     - name: instalacao do git client
       apt:
         name: git
         state: latest
-    - name: Clone do repositorio git
+    - name: Clone do repositório Notes - app
       git:
-        repo: 'https://github.com/nicolas-limadev/spring-rest-api.git'
-        dest: opt/app
+        repo: 'https://github.com/callicoder/spring-boot-mysql-rest-api-tutorial.git'
+        dest: /opt/notes
         clone: yes
         force: yes
-
-    - name: Arquivo de propriedades para camada de banco de dados
+    - name: Configurar arquivo de propriedades para camada de banco de dados
       template:
         src: application.properties
-        dest: opt/app/spring-rest-api/src/main/resources/application.properties
-
-    - name: Gerar pacotes da aplicação
-      command: mvn -f /opt/app/spring-rest-api/pom.xml package
-      become: yes
+        dest: /opt/notes/src/main/resources/application.properties
+    - name: Gerar pacote da aplicação
+      command: mvn -f /opt/notes/pom.xml package
       become_user: app
-
-    - name: Registrar a versao atual do pacote
+    - name: Registrar versao atual do pacote
       shell:
-        cmd: mvn -o -q -Dexec.executable=echo -Dexec.args='${project.version}'
-        chdir: /opt/app
+        cmd: mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\['
+        chdir: /opt/notes/
       register: app_version
-
     - name: Configurar serviço do Systemd
       template:
-        src: etc/systemd/system/app.service
-        src: /etc/systemd/system/app.service
-        notify: reload daemon
-
-    - name: Iniciar servico app
-      service: 
-        name: app
+        src: etc/systemd/system/notes.service
+        dest: /etc/systemd/system/notes.service
+      notify: reload daemon
+    - name: Iniciar serviço notes
+      service:
+        name: notes
         state: restarted
   roles:
-    - configuracao-default-so
+      - configuracao-default-so
   handlers:
     - name: reload app
       systemd:
         state: restarted
-        daemon_reload: yes
-        name: 'app'
+        daemon_reload: yes 
+        name: 'notes'
     - name: reload daemon
       systemd:
         daemon_reexec: yes

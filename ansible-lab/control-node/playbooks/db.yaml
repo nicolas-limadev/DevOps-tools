@@ -4,22 +4,12 @@
 
   user: vagrant
   become: yes
-  vars_files: 
+  vars_files:
     - vars/main.yml
   vars:
     - dbname: "db01"
     - dbusername: "root"
-    - dbpassword: "devops"
-  tasks:
-    - name: Configurar hosts lab ansible
-      lineinfile: 
-        dest: /etc/hosts
-        state: present
-        line: "{{item}}"
-      with_items:
-        - 192.168.1.2 control-node
-        - 192.168.1.3 app01
-        - 192.168.1.4 db01
+    - dbpassword: "devopsmaonamassa"
   roles:
     - configuracao-default-so
-    - { role: geerlingguy.mysql }
+    - role: geerlingguy.mysql

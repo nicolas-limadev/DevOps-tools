@@ -1,4 +1,4 @@
-# 192.168.56.106
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.vm.hostname = "control-node"

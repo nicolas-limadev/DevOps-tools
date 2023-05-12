@@ -1,5 +1,5 @@
-FROM adoptopenjdk:jdk-11.0.19_7-alpine
-RUN addgroup -S notes && adduser -S notes -G notes
+FROM adoptopenjdk/openjdk11:jdk-11.0.19_7-alpine
+RUN addgroup -g 1000 notes && adduser -D -u 1000 -G notes notes
 ENV MAVEN_VERSION 3.9.1
 ENV MAVEN_HOME /usr/lib/mvn
 ENV PATH $MAVEN_HOME/bin:$PATH

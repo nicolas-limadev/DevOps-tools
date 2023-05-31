@@ -1,0 +1,23 @@
+#/bin/bash
+sudo apt install epel-release -y
+sudo apt install -y wget curl
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+sudo apt install -y jenkins
+
+# Instalacao Docker e Docker compose
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt install -y docker-ce docker-ce-cli containerd.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+systemctl daemon-reload
+systemctl restart docker

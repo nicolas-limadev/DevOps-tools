@@ -1,5 +1,6 @@
 {
-    "editor.fontFamily": "'JetBrains Mono', 'monospace', monospace",
+    "editor.fontFamily": "JetBrains Mono",
+    "editor.fontLigatures": true, 
     "java.compile.nullAnalysis.mode": "automatic",
     "ansible.python.interpreterPath": "/bin/python3.11"
 }

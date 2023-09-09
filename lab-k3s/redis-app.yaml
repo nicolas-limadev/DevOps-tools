@@ -46,7 +46,7 @@ metadata:
   name: devops-app-ingress
   namespace: devops
   annotations:
-    kubernetes.io/ingress.class: "traefik"
+    spec.ingressClassName: "traefik"
 spec:
   rules:
   - host: "www.192.168.1.2.sslip.io"

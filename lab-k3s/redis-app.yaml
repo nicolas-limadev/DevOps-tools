@@ -58,4 +58,4 @@ spec:
             service:
               name: redis-app
               port:
-                number: 80
+                number: 8081
